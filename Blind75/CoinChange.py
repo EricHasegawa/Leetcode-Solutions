@@ -1,16 +1,15 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [amount + 1] * (amount + 1)
         coins.sort()
-        numCoins = 0
-        i = len(coins) - 1
-        while (amount > 0 and i >= 0):
-            print(amount, i)
-            if (amount <= coins[i]):
-                amount -= coins[i]
-                numCoins += 1
-            else:
-                i -= 1
-        if amount != 0:
+        dp[0] = 0
+        for i in range(0, amount + 1):
+            for j in range(0, len(coins)):
+                if coins[j] <= i:
+                    dp[i] = min(dp[i], 1 + dp[i - coins[j]])
+                else:
+                    break
+        if dp[amount] > amount:
             return -1
         else:
-            return numCoins
+            return dp[amount]
